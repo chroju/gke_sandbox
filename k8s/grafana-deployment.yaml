@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.8.0 (0c0c027)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: grafana
+  name: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: grafana
+    spec:
+      containers:
+      - image: grafana/grafana:5.0.0
+        name: grafana
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: 200e6
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-claim0
+      - image: influxdb:1.5
+        name: influxdb
+        ports:
+        - containerPort: 8086
+        resources:
+          limits:
+            memory: 480e6
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: influxdb-claim0
+        - mountPath: /etc/influxdb
+          readOnly: True
+          name: influxdb-conf
+      restartPolicy: Always
+      volumes:
+      - name: grafana-claim0
+        persistentVolumeClaim:
+          claimName: grafana-claim0
+      - name: influxdb-claim0
+        persistentVolumeClaim:
+          claimName: influxdb-claim0
+      - name: influxdb-conf
+        configMap:
+          name: influxdb-conf
+          items:
+            - key: influxdb.conf
+              path: influxdb.conf
+status: {}
