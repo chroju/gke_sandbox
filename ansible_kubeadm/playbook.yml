@@ -1,0 +1,39 @@
+- hosts: master
+  tasks:
+  - name: apt-get update
+    apt:
+      name: "*"
+      state: latest
+  - name: apt-get install
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - apt-transport-https
+        - curl
+  - name: add apt-key
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+  - name: add apt source list
+    copy:
+      src: files/kubernetes.list
+      dest: /etc/apt/sources.list.d/kubernetes.list
+      remote_src: no
+  - name: apt-get install
+    apt:
+      name: "{{ packages }}"
+      update_cache: yes
+    vars:
+      packages:
+        - kubelet
+        - kubeadm
+        - kubectl
+  - name: apt-mark hold
+    dpkg_selections:
+      name: "{{ item }}"
+      selection: hold
+    loop:
+      - kubelet
+      - kubeadm
+      - kubectl
