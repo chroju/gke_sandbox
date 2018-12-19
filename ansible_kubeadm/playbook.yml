@@ -11,10 +11,15 @@
       packages:
         - apt-transport-https
         - curl
+        - ca-certificates
+        - software-properties-common
   - name: add apt-key
     apt_key:
-      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      url: "{{ item }}"
       state: present
+    loop:
+      - https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      - https://download.docker.com/linux/ubuntu/gpg
   - name: add apt source list
     copy:
       src: files/kubernetes.list
@@ -29,6 +34,7 @@
         - kubelet
         - kubeadm
         - kubectl
+        - docker-ce
   - name: apt-mark hold
     dpkg_selections:
       name: "{{ item }}"
@@ -37,3 +43,7 @@
       - kubelet
       - kubeadm
       - kubectl
+  - name: swapoff
+    shell: swapoff -a
+  - name: kubeadm init
+    shell: kubeadm init
