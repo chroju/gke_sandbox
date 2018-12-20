@@ -1,9 +1,5 @@
 - hosts: master
   tasks:
-  - name: apt-get update
-    apt:
-      name: "*"
-      state: latest
   - name: apt-get install
     apt:
       name: "{{ packages }}"
@@ -34,7 +30,7 @@
         - kubelet
         - kubeadm
         - kubectl
-        - docker-ce
+        - docker-ce=18.06.1~ce~3-0~ubuntu
   - name: apt-mark hold
     dpkg_selections:
       name: "{{ item }}"
@@ -45,5 +41,12 @@
       - kubectl
   - name: swapoff
     shell: swapoff -a
+  - name: check if installed kubelet
+    stat:
+      path: /var/lib/kubelet
+    register: is_installed
   - name: kubeadm init
     shell: kubeadm init
+    when: is_installed.stat.exists == False
+  - name: apply network addon
+    shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
