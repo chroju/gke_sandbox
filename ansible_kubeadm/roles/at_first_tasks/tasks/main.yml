@@ -1,0 +1,27 @@
+- name: make group
+  group:
+    name: admin
+    state: present
+- name: make user
+  user:
+    name: "{{ user }}"
+    group: admin
+- name: make user's .ssh dir
+  file:
+    path: "/home/{{ user }}/.ssh"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+- name: make user's .ssh dir
+  copy:
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ user }}/.ssh/authorized_keys"
+    remote_src: yes
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0600
+- name: apt update
+  apt:
+    name: "*"
+    state: latest
