@@ -1,11 +1,15 @@
 - name: make group
   group:
-    name: admin
+    name: "{{ item }}"
     state: present
+  loop:
+    - admin
+    - "{{ user }}"
 - name: make user
   user:
     name: "{{ user }}"
-    group: admin
+    groups: "{{ user }},admin"
+    password: "{{ password | password_hash('sha512') }}"
 - name: make user's .ssh dir
   file:
     path: "/home/{{ user }}/.ssh"
