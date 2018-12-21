@@ -1,0 +1,31 @@
+- name: make group
+  group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - admin
+    - "{{ user }}"
+- name: make user
+  user:
+    name: "{{ user }}"
+    groups: "{{ user }},admin"
+    password: "{{ password | password_hash('sha512') }}"
+- name: make user's .ssh dir
+  file:
+    path: "/home/{{ user }}/.ssh"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+- name: make user's .ssh dir
+  copy:
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ user }}/.ssh/authorized_keys"
+    remote_src: yes
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0600
+- name: apt update
+  apt:
+    name: "*"
+    state: latest

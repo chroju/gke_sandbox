@@ -1,0 +1,2 @@
+deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+deb https://apt.kubernetes.io/ kubernetes-xenial main

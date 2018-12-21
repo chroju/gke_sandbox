@@ -6,9 +6,12 @@ metadata:
     io.kompose.service: grafana-claim0
   name: grafana-claim0
 spec:
+  storageClassName: grafana
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
       storage: 100Mi
+    limits:
+      storage: 500Mi
 status: {}

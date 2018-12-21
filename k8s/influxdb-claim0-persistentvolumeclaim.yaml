@@ -6,9 +6,12 @@ metadata:
     io.kompose.service: influxdb-claim0
   name: influxdb-claim0
 spec:
+  storageClassName: influxdb
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
+    limits:
+      storage: 6Gi
 status: {}
