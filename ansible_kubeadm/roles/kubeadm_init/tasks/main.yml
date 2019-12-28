@@ -9,6 +9,7 @@
       - ca-certificates
       - software-properties-common
   become: yes
+
 - name: add apt-key
   apt_key:
     url: "{{ item }}"
@@ -17,12 +18,14 @@
     - https://packages.cloud.google.com/apt/doc/apt-key.gpg
     - https://download.docker.com/linux/ubuntu/gpg
   become: yes
+
 - name: add apt source list
   copy:
     src: files/kubernetes.list
     dest: /etc/apt/sources.list.d/kubernetes.list
     remote_src: no
   become: yes
+
 - name: apt-get install
   apt:
     name: "{{ packages }}"
@@ -34,6 +37,7 @@
       - kubectl
       - docker-ce=18.06.1~ce~3-0~ubuntu
   become: yes
+
 - name: apt-mark hold
   dpkg_selections:
     name: "{{ item }}"
@@ -43,22 +47,27 @@
     - kubeadm
     - kubectl
   become: yes
+
 - name: swapoff
   shell: swapoff -a
   become: yes
+
 - name: check if installed kubelet
   stat:
     path: "/var/lib/kubelet/*"
   register: is_installed
   become: yes
+
 - name: kubeadm init
   shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address={{ ansible_eth0.ipv4.address }}
   when: is_installed.stat.exists == False
   become: yes
+
 - name: make .kube dir
   file:
     path: /home/{{ user }}/.kube
     state: directory
+
 - name: copy kubernetes config
   copy:
     remote_src: yes
@@ -67,6 +76,7 @@
     owner: "{{ user }}"
     group: "{{ user }}"
   become: yes
+
 - name: apply network addon
   shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
 
