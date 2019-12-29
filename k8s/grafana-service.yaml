@@ -12,14 +12,16 @@ spec:
   selector:
     io.kompose.service: influxdb
   ports:
-  - name: "3000"
+  - name: influxdb
     port: 3000
     targetPort: 3000
-  - name: "8086"
+    nodePort: 30030
+  - name: grafana
     port: 8086
     targetPort: 8086
+    nodePort: 30086
   selector:
     io.kompose.service: grafana
-  type: LoadBalancer
+  type: NodePort
 status:
   loadBalancer: {}
