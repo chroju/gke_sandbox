@@ -26,15 +26,25 @@
     remote_src: no
   become: yes
 
+- name: apt-mark unhold
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: install
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+  become: yes
+
 - name: apt-get install
   apt:
     name: "{{ packages }}"
     update_cache: yes
   vars:
     packages:
-      - kubelet
-      - kubeadm
-      - kubectl
+      - kubelet=1.17.0-00
+      - kubeadm=1.17.0-00
+      - kubectl=1.17.0-00
       - docker-ce=18.06.1~ce~3-0~ubuntu
   become: yes
 
@@ -61,6 +71,7 @@
 - name: kubeadm init
   shell: kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address={{ ansible_eth0.ipv4.address }}
   when: is_installed.stat.exists == False
+  ignore_errors: True
   become: yes
 
 - name: make .kube dir
@@ -77,6 +88,16 @@
     group: "{{ user }}"
   become: yes
 
+- name: set sysctl for kube network addon flannel
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    state: present
+  become: yes
+
 - name: apply network addon
-  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+- name: taint nodes
+  shell: kubectl taint nodes --all node-role.kubernetes.io/master-
 
