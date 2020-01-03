@@ -8,6 +8,8 @@ metadata:
   labels:
     io.kompose.service: grafana
   name: grafana
+  annotations:
+    fluxcd.io/automated: "true"
 spec:
   selector:
     io.kompose.service: influxdb

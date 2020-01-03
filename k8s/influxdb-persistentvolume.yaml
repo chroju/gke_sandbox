@@ -4,6 +4,8 @@ metadata:
   name: influxdb-pv-volume
   labels:
     type: local
+  annotations:
+    fluxcd.io/automated: "true"
 spec:
   storageClassName: influxdb
   capacity:

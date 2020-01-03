@@ -4,6 +4,8 @@ metadata:
   name: grafana-pv-volume
   labels:
     type: local
+  annotations:
+    fluxcd.io/automated: "true"
 spec:
   storageClassName: grafana
   capacity:
