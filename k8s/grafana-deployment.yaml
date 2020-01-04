@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +6,7 @@ metadata:
     kompose.cmd: kompose convert
     kompose.version: 1.8.0 (0c0c027)
     fluxcd.io/automated: "true"
-  creationTimestamp: null
+  creationTimestamp:
   labels:
     io.kompose.service: grafana
   name: grafana
@@ -19,7 +20,7 @@ spec:
       app: grafana
   template:
     metadata:
-      creationTimestamp: null
+      creationTimestamp:
       labels:
         app: grafana
         io.kompose.service: grafana
@@ -46,9 +47,8 @@ spec:
         - mountPath: /var/lib/influxdb
           name: influxdb-claim0
         - mountPath: /etc/influxdb
-          readOnly: True
+          readOnly: true
           name: influxdb-conf
-      restartPolicy: OnFailure
       volumes:
       - name: grafana-claim0
         persistentVolumeClaim:
@@ -60,6 +60,6 @@ spec:
         configMap:
           name: influxdb-conf
           items:
-            - key: influxdb.conf
-              path: influxdb.conf
+          - key: influxdb.conf
+            path: influxdb.conf
 status: {}
