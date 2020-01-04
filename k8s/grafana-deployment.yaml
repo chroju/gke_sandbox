@@ -26,7 +26,7 @@ spec:
         io.kompose.service: grafana
     spec:
       containers:
-      - image: grafana/grafana:5.0.0
+      - image: grafana/grafana:master-ubuntu
         name: grafana
         ports:
         - containerPort: 3000
