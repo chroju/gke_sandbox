@@ -5,7 +5,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.8.0 (0c0c027)
-    fluxcd.io/automated: "true"
   creationTimestamp:
   labels:
     io.kompose.service: grafana
@@ -26,7 +25,7 @@ spec:
         io.kompose.service: grafana
     spec:
       containers:
-      - image: grafana/grafana:master-ubuntu
+      - image: grafana/grafana:5.0.0
         name: grafana
         ports:
         - containerPort: 3000
@@ -36,7 +35,7 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-claim0
-      - image: influxdb:1.7-meta
+      - image: influxdb:1.5
         name: influxdb
         ports:
         - containerPort: 8086
