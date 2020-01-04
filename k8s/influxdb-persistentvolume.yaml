@@ -2,6 +2,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: influxdb-pv-volume
+  namespace: grafana
   labels:
     type: local
   annotations:

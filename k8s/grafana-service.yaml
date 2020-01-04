@@ -4,15 +4,13 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.8.0 (0c0c027)
+    fluxcd.io/automated: "true"
   creationTimestamp: null
   labels:
     io.kompose.service: grafana
   name: grafana
-  annotations:
-    fluxcd.io/automated: "true"
+  namespace: grafana
 spec:
-  selector:
-    io.kompose.service: influxdb
   ports:
   - name: influxdb
     port: 3000

@@ -5,6 +5,7 @@ metadata:
   labels:
     io.kompose.service: influxdb-claim0
   name: influxdb-claim0
+  namespace: grafana
   annotations:
     fluxcd.io/automated: "true"
 spec:
