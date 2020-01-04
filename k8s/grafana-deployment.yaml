@@ -48,7 +48,7 @@ spec:
         - mountPath: /etc/influxdb
           readOnly: True
           name: influxdb-conf
-      restartPolicy: Always
+      restartPolicy: OnFailure
       volumes:
       - name: grafana-claim0
         persistentVolumeClaim:
