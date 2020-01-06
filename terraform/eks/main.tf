@@ -1,9 +1,5 @@
 data "aws_subnet_ids" "private" {
-  vpc_id = "vpc-8cb763e9"
-  filter {
-    name   = "tag:Type"
-    values = ["private"]
-  }
+  vpc_id = var.vpc_id
 }
 
 resource "aws_eks_cluster" "nebula" {
