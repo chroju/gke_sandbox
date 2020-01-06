@@ -1,5 +1,14 @@
-data "aws_subnet_ids" "private" {
+data "aws_subnet_ids" "for_cluster" {
   vpc_id = var.vpc_id
+}
+
+data "aws_subnet_ids" "for_private" {
+  vpc_id = var.vpc_id
+
+  #filter {
+  #name   = "tag:Name"
+  #values = []
+  #}
 }
 
 resource "aws_eks_cluster" "nebula" {
@@ -7,7 +16,7 @@ resource "aws_eks_cluster" "nebula" {
   role_arn = aws_iam_role.nebula_cluster_role.arn
 
   vpc_config {
-    subnet_ids = data.aws_subnet_ids.private.ids
+    subnet_ids = data.aws_subnet_ids.for_cluster.ids
   }
 
   enabled_cluster_log_types = ["api", "audit", "scheduler"]
@@ -23,7 +32,7 @@ resource "aws_eks_fargate_profile" "nebula" {
   cluster_name           = aws_eks_cluster.nebula.name
   fargate_profile_name   = var.cluster_name
   pod_execution_role_arn = aws_iam_role.nebula_pod_role.arn
-  subnet_ids             = data.aws_subnet_ids.private.ids
+  subnet_ids             = data.aws_subnet_ids.for_private.ids
 
   selector {
     namespace = "default"
