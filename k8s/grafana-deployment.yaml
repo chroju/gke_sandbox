@@ -25,7 +25,7 @@ spec:
         io.kompose.service: grafana
     spec:
       containers:
-      - image: mackerel/mackerel-container-agent:0.2.0
+      - image: mackerel/mackerel-container-agent:v0.2.0
         name: mackerel
         imagePullPolicy: Always
         resources:
@@ -43,6 +43,10 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.hostIP
+          - name: MACKEREL_KUBERNETES_KUBELET_READ_ONLY_PORT
+            value: "0"
+          - name: MACKEREL_KUBERNETES_KUBELET_INSECURE_TLS
+            value: "true"
           - name: MACKEREL_KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
@@ -51,7 +55,7 @@ spec:
             valueFrom:
              fieldRef:
                 fieldPath: metadata.name
-      - image: grafana/grafana:5.4.3
+      - image: grafana/grafana:5.0.0
         name: grafana
         ports:
         - containerPort: 3000
