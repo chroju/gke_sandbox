@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: softethervpn
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: softethervpn
+  namespace: softethervpn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: softethervpn
+  template:
+    metadata:
+      labels:
+        app: softethervpn
+    spec:
+      containers:
+      - name: softethervpn
+        image: chroju/softethervpn:v0.0.1
+        ports:
+        - containerPort: 5555
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: softethervpn
+  namespace: softethervpn
+spec:
+  ports:
+  - name: softethervpn
+    port: 5555
+    targetPort: 5555
+    nodePort: 30555
+  type: NodePort
+status:
+  loadBalancer: {}
+
