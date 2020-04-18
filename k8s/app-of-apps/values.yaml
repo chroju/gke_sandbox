@@ -1,0 +1,9 @@
+applications:
+  namespaces:
+    enabled: true
+    namespace: default
+    sourcePath: kubernetes/namespaces
+    targetRevision: HEAD
+    automated: true
+    prune: false
+    selfHeal: true
