@@ -7,10 +7,10 @@ spec:
   sourceRepos:
   - https://github.com/chroju/sandbox-infrastructure
   destinations:
-  - namespace: external-secrets
+  {{- range $namespace := .Values.namespaces }}
+  - namespace: {{ $namespace }}
     server: https://kubernetes.default.svc
-  - namespace: default
-    server: https://kubernetes.default.svc
+  {{- end }}
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
