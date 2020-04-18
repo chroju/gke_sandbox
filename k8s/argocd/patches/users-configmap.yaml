@@ -1,0 +1,25 @@
+- op: add
+  path: /data
+  value:
+    accounts.chroju: apiKey, login
+    accounts.chroju.enabled: "true"
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: argocd-cm
+#   labels:
+#     app.kubernetes.io/name: argocd-cm
+#     app.kubernetes.io/part-of: argocd
+# data:
+#   accounts.alice: apiKey, login
+#   accounts.alice.enabled: "false"
+---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: argocd-cm
+#   labels:
+#     app.kubernetes.io/name: argocd-cm
+#     app.kubernetes.io/part-of: argocd
+# data:
+#   admin.enabled: "false"

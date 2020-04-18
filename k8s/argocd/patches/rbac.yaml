@@ -1,0 +1,6 @@
+- op: add
+  path: /data
+  value:
+    policy.default: role:admin
+    policy.csv: |
+      g, globis-org:SRE, role:admin
