@@ -1,11 +1,20 @@
 namespaces:
 - default
 - external-secrets
+- grafana
 applications:
   namespaces:
     enabled: true
     namespace: default
     sourcePath: kubernetes/namespaces
+    targetRevision: HEAD
+    automated: true
+    prune: false
+    selfHeal: true
+  grafana:
+    enabled: true
+    namespace: grafana
+    sourcePath: kubernetes/grafana
     targetRevision: HEAD
     automated: true
     prune: false
